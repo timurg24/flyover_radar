@@ -10,9 +10,9 @@ struct LocationBounds {
 
 // TODO: Expand for more alert options
 struct AircraftData {
-  String icaoType      = "None";
-  String registration  = "None";
-  String country       = "Empty";
+  String icaoType      = "";
+  String registration  = "";
+  String country       = "";
 };
 
 #endif
