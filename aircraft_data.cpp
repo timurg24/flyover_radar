@@ -1,7 +1,69 @@
 #include "aircraft_data.h"
-
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+
+String openSkyToken = "";
+
+bool refreshOpenSkyToken() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("OpenSky token failure: WiFi not connected");
+    return false;
+  }
+
+  HTTPClient http;
+
+  String tokenUrl = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token";
+
+  http.begin(tokenUrl);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  String body = "";
+  body += "grant_type=client_credentials";
+  body += "&client_id=" + String(clientID);
+  body += "&client_secret=" + String(clientSecret);
+
+  int responseCode = http.POST(body);
+
+  if (responseCode != 200) {
+    Serial.print("OpenSky token HTTP error: ");
+    Serial.println(responseCode);
+    Serial.println(http.getString());
+    http.end();
+    return false;
+  }
+
+  String payload = http.getString();
+
+  StaticJsonDocument<2048> doc;
+  DeserializationError error = deserializeJson(doc, payload);
+
+  if (error) {
+    Serial.print("OpenSky token JSON parse failure: ");
+    Serial.println(error.c_str());
+    http.end();
+    return false;
+  }
+
+  openSkyToken = doc["access_token"].as<String>();
+
+  http.end();
+
+  if (openSkyToken.length() == 0) {
+    Serial.println("OpenSky token failure: empty token");
+    return false;
+  }
+
+  Serial.println("OpenSky token OK");
+  return true;
+}
+
+bool ensureOpenSkyToken() {
+  if (openSkyToken.length() == 0) {
+    return refreshOpenSkyToken();
+  }
+
+  return true;
+}
 
 // Returns the URL for the GET call within the desired bounds
 String getRequestString(LocationBounds location) {
@@ -62,14 +124,20 @@ AircraftData getDataFromICAO(String icao) {
 // OpenSky
 void getAircraftData(int& count, AircraftData data[]) {
   if(WiFi.status() == WL_CONNECTED) {
+    
+    if (!ensureOpenSkyToken()) {
+      Serial.println("ASVR FAILURE\nReason: Could not get OpenSky token.");
+      return;
+    }
+
     HTTPClient http;
 
+
     http.begin(getRequestString(bounds));
-    http.setAuthorization(clientID, clientSecret);
+    http.addHeader("Authorization", "Bearer " + openSkyToken);
 
     int responseCode = http.GET();
-    
-    if(responseCode > 0) {
+    if(responseCode == 200) {
       Serial.println();
       Serial.print("ASVR OK [");
       Serial.print(responseCode);
@@ -98,11 +166,20 @@ void getAircraftData(int& count, AircraftData data[]) {
       Serial.print(". Aircraft Count: ");
       Serial.print(count);
 
-    } else {
-      Serial.print("ASVR Failure\nGET Response Code: ");
-      Serial.println(responseCode);
-      Serial.print("HTTP Error: ");
-      Serial.println(http.errorToString(responseCode));
+    }
+    else if (responseCode == 401) {
+      Serial.print("ASVR Failure [401] Token expired or invalid. Refreshing token...");
+
+      http.end();
+
+      refreshOpenSkyToken();
+      if(ensureOpenSkyToken()) Serial.println("OK");
+
+      return;
+    }
+    else if (responseCode == 429) {
+      Serial.println("ASVR Failure [429] Too many requests / credits exhausted");
+      Serial.println(http.getString());
     }
     http.end();
   } else {
