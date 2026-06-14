@@ -12,7 +12,11 @@ const char* wifiPassword = "super cool password";
 // OpenSky
 const char* clientID = "OpenSky Client ID goes here";
 const char* clientSecret = "is the secret in the room with us";
-int openSkyInterval = 5000;
+int openSkyInterval = 30000;
+
+// Telegram
+const char* telegramBotID = "bot id";
+int64_t  telegramChatID = 123;
 
 // Location
 // Change only this VVVV
@@ -41,7 +45,7 @@ LocationBounds bounds = {
 int interfacePort = 24001;
 
 // Alerts
-int alertsCount = 51;
+int alertCount = 51;
 AircraftData alerts[] = {
   {"a310"}, {"an12"}, {"a124"}, {"a148"}, {"an26"}, {"an32"}, {"v22"}, {"b742"}, {"b743"}, {"b74s"}, {"b52"}, {"c135"}, {"c17"}, {"blcf"}, {"e3tf"}, {"e6"}, {"k35r"}, {"p8"}, {"r135"}, {"dc3"},
   {"eufi"}, {"f16"}, {"il62"}, {"il76"}, {"il96"}, {"c5m"}, {"c130"}, {"c130j"}, {"f22"}, {"f35"}, {"p3"}, {"u2"}, {"dc10"}, {"f15"}, {"f18"}, {"md11"}, {"md81"},{"md82"},{"md83"},{"md87"},{"md88"},
