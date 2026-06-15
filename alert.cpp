@@ -8,14 +8,15 @@ WiFiClientSecure client;
 AsyncTelegram2 bot(client);
 
 void setupAlerts() {
+  Serial.print("Telegram Bot Auth ");
   client.setInsecure();
 
   bot.setUpdateTime(1000);
   bot.setTelegramToken(telegramBotID);
 
   if(bot.begin()) {
-    Serial.println("Telegram Bot OK");
-  } else Serial.println("Telegram Bot FAIL");
+    Serial.println("OK");
+  } else Serial.println("FAIL");
 }
 
 void sendAlert(AircraftData data) {
@@ -29,15 +30,26 @@ void sendAlert(AircraftData data) {
 void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, AircraftData alertAircraft[]) {
   for(int i = 0; i < aircraftCount; i++) {
     for(int j = 0; j < alertCount; j++) {
+
+      String aircraftRegistration = aircraft[i].registration;
+      String alertRegistration = alertAircraft[j].registration;
+      String aircraftType = aircraft[i].icaoType;
+      String alertType = alertAircraft[j].icaoType;
+
+      aircraftRegistration.toUpperCase();
+      alertRegistration.toUpperCase();
+      aircraftType.toUpperCase();
+      alertType.toUpperCase();
+
       bool registrationMatch =
-        aircraft[i].registration.length() > 0 &&
-        alertAircraft[j].registration.length() > 0 &&
-        aircraft[i].registration == alertAircraft[j].registration;
+        aircraftRegistration.length() > 0 &&
+        alertRegistration.length() > 0 &&
+        aircraftRegistration == alertRegistration;
 
       bool typeMatch =
-        aircraft[i].icaoType.length() > 0 &&
-        alertAircraft[j].icaoType.length() > 0 &&
-        aircraft[i].icaoType == alertAircraft[j].icaoType;
+        aircraftType.length() > 0 &&
+        alertType.length() > 0 &&
+        aircraftType == alertType;
 
       if (registrationMatch || typeMatch) {
         sendAlert(aircraft[i]);
