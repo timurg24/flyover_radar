@@ -1,6 +1,7 @@
 #include "env.h"
 #include "data_types.h"
 #include "aircraft_data.h"
+#include "alert.h"
 
 /*
   Flyover Radar v1.0.0
@@ -55,14 +56,19 @@ void setup() {
 
   Serial.print("Local IP: ");
   Serial.println(WiFi.localIP());
-  Serial.print("Web Port: ");
-  Serial.println(interfacePort);
+
+  setupAlerts();
 }
 
-
+unsigned long lastOpenSkyCheck = 0;
 
 void loop() {
-    // TODO: Replace with millis
-    getAircraftData(aircraftCount, aircraft);
-    delay(openSkyInterval);
+    unsigned long currentMillis = millis();
+
+    if (currentMillis - lastOpenSkyCheck >= openSkyInterval) {
+        lastOpenSkyCheck = currentMillis;
+
+        getAircraftData(aircraftCount, aircraft);
+        compareAlerts(aircraftCount, aircraft, alerts);
+    }
 }
