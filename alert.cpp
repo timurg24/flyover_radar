@@ -33,8 +33,15 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
 
       String aircraftRegistration = aircraft[i].registration;
       String alertRegistration = alertAircraft[j].registration;
+
       String aircraftType = aircraft[i].icaoType;
       String alertType = alertAircraft[j].icaoType;
+
+      int aircraftCategory = aircraft[i].category;
+      int alertCategory = alertAircraft[j].category;
+
+      String aircraftSquawk = aircraft[i].squawk;
+      String alertSquawk = alertAircraft[j].squawk;
 
       aircraftRegistration.toUpperCase();
       alertRegistration.toUpperCase();
@@ -51,7 +58,15 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
         alertType.length() > 0 &&
         aircraftType == alertType;
 
-      if (registrationMatch || typeMatch) {
+      bool categoryMatch =
+        aircraftCategory == alertCategory;
+      
+      bool squakMatch =
+        aircraftSquawk.length() > 0 &&
+        alertSquawk.length() > 0 &&
+        aircraftSquawk == alertSquawk;
+
+      if (registrationMatch || typeMatch || categoryMatch || squakMatch) {
         sendAlert(aircraft[i]);
         Serial.print("\t> Aircraft Alert Sent: ");
         Serial.print(aircraft[i].registration);
