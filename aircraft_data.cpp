@@ -53,7 +53,7 @@ bool refreshOpenSkyToken() {
     return false;
   }
 
-  Serial.println("OpenSky Token Gen.` OK");
+  Serial.println("\nOpenSky Token Gen. OK");
   return true;
 }
 
@@ -163,18 +163,22 @@ void getAircraftData(int& count, AircraftData data[]) {
       for (JsonArray state : states) {
           String icao = state[0].as<String>();
           data[i] = getDataFromICAO(icao);
+          data[i].category = state[17].as<int>();
+          if(!state[14].isNull()) {
+            data[i].squawk = state[14].as<String>();
+          }
           i++;
       }
       count = i;
 
     }
     else if (responseCode == 401) {
-      Serial.print("ASVR Failure [401] Token expired or invalid. Refreshing token...");
+      Serial.print("\nASVR Failure [401] Token expired or invalid. Refreshing token...");
 
       http.end();
 
       refreshOpenSkyToken();
-      if(ensureOpenSkyToken()) Serial.println("OK");
+      ensureOpenSkyToken();
 
       return;
     }
