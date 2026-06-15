@@ -10,6 +10,12 @@ std::vector<String> alertedRegistrations;
 WiFiClientSecure client;
 AsyncTelegram2 bot(client);
 
+bool isMilitaryReg(String registration) {
+  String first3 = registration.substring(0,3);
+  if(isDigit(first3[0]) && isDigit(first3[1]) && first3[2] == '-') return true;
+  else return false;
+}
+
 void setupAlerts() {
   Serial.print("Telegram Bot Auth ");
   client.setInsecure();
@@ -70,15 +76,19 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
         alertSquawk.length() > 0 &&
         aircraftSquawk == alertSquawk;
 
+      bool militaryMatch =
+        isMilitaryReg(aircraftRegistration) &&
+        aircraftCategory == USMilitary;
+
       bool alreadyAlerted = false;
       for(String reg : alertedRegistrations) {
-        if(aircraftRegistration == reg && registrationMatch) {
+        if (aircraftRegistration.length() > 0 && aircraftRegistration == reg) {
           alreadyAlerted = true;
           break;
         }
       }
 
-      if (registrationMatch || typeMatch || categoryMatch || squawkMatch) {
+      if (registrationMatch || typeMatch || categoryMatch || squawkMatch || militaryMatch) {
         if(!alreadyAlerted) {
           sendAlert(aircraft[i]);
           Serial.print(" (Alert Sent)");
