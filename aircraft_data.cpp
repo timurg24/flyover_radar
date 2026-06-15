@@ -82,21 +82,30 @@ AircraftData getDataFromICAO(String icao) {
   HTTPClient http;
 
   String hexdb = "https://hexdb.io/api/v1/aircraft/" + icao;
-  http.setTimeout(20000);        // 20 seconds instead of default timeout
+  http.setTimeout(20000);
   http.setReuse(false);
   http.begin(hexdb);
 
   int responseCode = http.GET();
+
+  if (responseCode <= 0) {
+    Serial.print("\nHexDB connection error: ");
+    Serial.println(http.errorToString(responseCode));
+    http.end();
+    return aircraftData;
+  }
+
   String payload = http.getString();
+
+  if (payload.length() == 0) {
+    Serial.print("\nHexDB empty payload. HTTP code: ");
+    Serial.println(responseCode);
+    http.end();
+    return aircraftData;
+  }
+
   StaticJsonDocument<2048> doc;
   DeserializationError error = deserializeJson(doc, payload);
-
-  if (error) {
-      Serial.print("JSON Parse failure: ");
-      Serial.println(error.c_str());
-      http.end();
-      return aircraftData;
-  }
 
   if(responseCode == 200) { // success
 
