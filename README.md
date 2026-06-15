@@ -13,3 +13,4 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
 
 # Known Issues
 - HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.`
+- HexDB returning incorrect ICAO type codes for brand new aircraft (registration should still be correct)
