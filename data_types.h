@@ -8,12 +8,35 @@ struct LocationBounds {
   float lomin, lomax;
 };
 
+enum AircraftCategory : int {
+  Undefined = -1,
+  Unknown = 0,
+  NoCat = 1,
+  Light = 2,
+  Small = 3,
+  Large = 4,
+  HighVortexLarge = 5,
+  Heavy = 6,
+  HighPerformance = 7,
+  Rotorcraft = 8,
+  Glider = 9,
+  LighterThanAir = 10,
+  Parachutist = 11,
+  Ultralight = 12
+  UAV = 14,
+  SpaceVehicle = 15,
+  EmergencyGroundVehicle = 16,
+  ServiceGroundVehicl = 17,
+  PointObstacle = 18,
+  ClusterObstacle = 19,
+  LineObstacle = 20
+};
+
 struct AircraftData {
-  String icaoType      = "";
-  String registration  = "";
-  // String country       = "";
-  int category;
-  String squawk        = "";
+  String icaoType           = "";
+  String registration       = "";
+  AircraftCategory category = Undefined;
+  String squawk             = "";
 };
 
 #endif
