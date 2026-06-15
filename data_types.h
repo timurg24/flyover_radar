@@ -26,7 +26,7 @@ enum AircraftCategory : int {
   UAV = 14,
   SpaceVehicle = 15,
   EmergencyGroundVehicle = 16,
-  ServiceGroundVehicl = 17,
+  ServiceGroundVehicle = 17,
   PointObstacle = 18,
   ClusterObstacle = 19,
   LineObstacle = 20,
