@@ -68,8 +68,7 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
 
       if (registrationMatch || typeMatch || categoryMatch || squakMatch) {
         sendAlert(aircraft[i]);
-        Serial.print("\t> Aircraft Alert Sent: ");
-        Serial.print(aircraft[i].registration);
+        Serial.print("(Alert Sent)");
         break; // prevents sending multiple alerts for same aircraft
       }
     }
