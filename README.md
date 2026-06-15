@@ -53,6 +53,6 @@ Everything needs to be configured inside `env.example.cpp` (or your own `.cpp` f
 
 19 = Cluster Obstacle
 
-40 = United States Air Force
-
 20 = Line Obstacle
+
+40 = United States Air Force
