@@ -8,11 +8,12 @@ struct LocationBounds {
   float lomin, lomax;
 };
 
-// TODO: Expand for more alert options
 struct AircraftData {
   String icaoType      = "";
   String registration  = "";
-  String country       = "";
+  // String country       = "";
+  int category;
+  String squawk        = "";
 };
 
 #endif
