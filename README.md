@@ -1,5 +1,5 @@
 # flyover_radar
-ESP32 project that alerts you when a cool plane is flying over your house (all configurable!)
+Are you tired of missing out on planespotting cool airplanes? Me too! I've missed one too many Chinooks and Stratolifters so I built this software to alert me when an airplane is approaching.
 
 # Requirements
 - Yourself
