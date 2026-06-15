@@ -3,6 +3,9 @@
 
 #include <WiFiClientSecure.h>
 #include <AsyncTelegram2.h>
+#include <vector>
+
+std::vector<String> alertedRegistrations;
 
 WiFiClientSecure client;
 AsyncTelegram2 bot(client);
@@ -62,15 +65,26 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
         aircraftCategory != -1 &&
         aircraftCategory == alertCategory;
       
-      bool squakMatch =
+      bool squawkMatch =
         aircraftSquawk.length() > 0 &&
         alertSquawk.length() > 0 &&
         aircraftSquawk == alertSquawk;
 
-      if (registrationMatch || typeMatch || categoryMatch || squakMatch) {
-        sendAlert(aircraft[i]);
-        Serial.print(" (Alert Sent)");
-        break; // prevents sending multiple alerts for same aircraft
+      bool alreadyAlerted = false;
+      for(String reg : alertedRegistrations) {
+        if(aircraftRegistration == reg && registrationMatch) {
+          alreadyAlerted = true;
+          break;
+        }
+      }
+
+      if (registrationMatch || typeMatch || categoryMatch || squawkMatch) {
+        if(!alreadyAlerted) {
+          sendAlert(aircraft[i]);
+          Serial.print(" (Alert Sent)");
+          alertedRegistrations.push_back(aircraftRegistration);
+          break; // prevents sending multiple alerts for same aircraft
+        }
       }
     }
   }
