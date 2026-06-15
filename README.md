@@ -14,7 +14,7 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
 # Config
 Everything needs to be configured inside `env.example.cpp` (or your own `.cpp` file with the exact same variables).
 
-# Aircraft Categories
+# Aircraft Categories (use Enum AircraftCategory)
 0 = No information at all
 
 1 = No ADS-B Emitter Category Information
@@ -41,8 +41,6 @@ Everything needs to be configured inside `env.example.cpp` (or your own `.cpp` f
 
 12 = Ultralight / hang-glider / paraglider
 
-13 = Reserved
-
 14 = Unmanned Aerial Vehicle
 
 15 = Space / Trans-atmospheric vehicle
@@ -54,5 +52,7 @@ Everything needs to be configured inside `env.example.cpp` (or your own `.cpp` f
 18 = Point Obstacle (includes tethered balloons)
 
 19 = Cluster Obstacle
+
+40 = United States Air Force
 
 20 = Line Obstacle
