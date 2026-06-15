@@ -172,7 +172,7 @@ void getAircraftData(int& count, AircraftData data[]) {
       for (JsonArray state : states) {
           String icao = state[0].as<String>();
           data[i] = getDataFromICAO(icao);
-          data[i].category = state[17].as<int>();
+          data[i].category = static_cast<AircraftCategory>(state[17].as<int>());
           if(!state[14].isNull()) {
             data[i].squawk = state[14].as<String>();
           }
