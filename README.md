@@ -12,6 +12,6 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
 - Brain
 
 # Known Issues
-- HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.` As a result of this GA aircrat rarely show up.
+- HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.` General Aviation aircraft are the most affected.
 - HexDB returning incorrect ICAO type codes for brand new aircraft (registration should still be correct)
 - When something refuses to connect, just restart the ESP (always works for me)
