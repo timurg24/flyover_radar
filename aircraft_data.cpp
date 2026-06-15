@@ -89,21 +89,24 @@ AircraftData getDataFromICAO(String icao) {
   int responseCode = http.GET();
   String payload = http.getString();
   StaticJsonDocument<2048> doc;
+  DeserializationError error = deserializeJson(doc, payload);
 
-
-  if(responseCode == 200) { // success
-    DeserializationError error = deserializeJson(doc, payload);
-
-    if (error) {
+  if (error) {
       Serial.print("JSON Parse failure: ");
       Serial.println(error.c_str());
       http.end();
       return aircraftData;
-    }
+  }
+
+  if(responseCode == 200) { // success
 
     if (!doc["Registration"].isNull()) {
       aircraftData.registration = doc["Registration"].as<String>();
       aircraftData.icaoType = doc["ICAOTypeCode"].as<String>();
+      Serial.print("\n    Registration: ");
+      Serial.print(aircraftData.registration);
+      Serial.print(" ICAO: ");
+      Serial.print(aircraftData.icaoType);
     }
 
   } else if(responseCode == 404) {
@@ -163,8 +166,6 @@ void getAircraftData(int& count, AircraftData data[]) {
           i++;
       }
       count = i;
-      Serial.print(". Aircraft Count: ");
-      Serial.print(count);
 
     }
     else if (responseCode == 401) {
