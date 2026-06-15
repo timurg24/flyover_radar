@@ -4,6 +4,7 @@
 #define ENV_H
 
 #include "data_types.h"
+#include <vector>
 
 extern const char* wifiName;
 extern const char* wifiPassword;
@@ -20,7 +21,6 @@ extern int interfacePort;
 
 extern int openSkyInterval;
 
-extern int alertCount;
-extern AircraftData alerts[];
+extern std::vector<AircraftData> alerts;
 
 #endif
