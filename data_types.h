@@ -29,7 +29,9 @@ enum AircraftCategory : int {
   ServiceGroundVehicl = 17,
   PointObstacle = 18,
   ClusterObstacle = 19,
-  LineObstacle = 20
+  LineObstacle = 20,
+
+  USMilitary = 40
 };
 
 struct AircraftData {
