@@ -22,7 +22,7 @@ enum AircraftCategory : int {
   Glider = 9,
   LighterThanAir = 10,
   Parachutist = 11,
-  Ultralight = 12
+  Ultralight = 12,
   UAV = 14,
   SpaceVehicle = 15,
   EmergencyGroundVehicle = 16,
