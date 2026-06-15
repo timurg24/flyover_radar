@@ -120,10 +120,16 @@ AircraftData getDataFromICAO(String icao) {
 
   } else if(responseCode == 404) {
     Serial.print("\n\tICAO BD Request Fail [404] : ");
-    Serial.println(doc["error"].as<String>());
+    Serial.print(doc["error"].as<String>());
+    Serial.print(" (");
+    Serial.print(icao);
+    Serial.println(")");
   } else if(responseCode == 429) {
     Serial.print("\n\tICAO BD Request Fail [429] : ");
-    Serial.println(doc["error"].as<String>());
+    Serial.print(doc["error"].as<String>());
+    Serial.print(" (");
+    Serial.print(icao);
+    Serial.println(")");
   } else {
     Serial.print("\n\tICAO BD HTTP Error: ");
     Serial.println(http.errorToString(responseCode));
