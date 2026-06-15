@@ -48,7 +48,7 @@ int interfacePort = 24001;
 AircraftData alerts[] = {
   // Aircraft Types
   {"a310"}, {"an12"}, {"a124"}, {"a148"}, {"an26"}, {"an32"}, {"v22"}, {"b742"}, {"b743"}, {"b74s"}, {"b52"}, {"c135"}, {"c17"}, {"blcf"}, {"e3tf"}, {"e6"}, {"k35r"}, {"p8"}, {"r135"}, {"dc3"},
-  {"eufi"}, {"f16"}, {"il62"}, {"il76"}, {"il96"}, {"c5m"}, {"c130"}, {"c130j"}, {"f22"}, {"f35"}, {"p3"}, {"u2"}, {"dc10"}, {"f15"}, {"f18"}, {"md11"}, {"md81"},{"md82"},{"md83"},{"md87"},{"md88"},
+  {"eufi"}, {"f16"}, {"il62"}, {"il76"}, {"il96"}, {"c5m"}, {"c130"}, {"c30j"}, {"f22"}, {"f35"}, {"p3"}, {"u2"}, {"dc10"}, {"f15"}, {"f18"}, {"md11"}, {"md81"},{"md82"},{"md83"},{"md87"},{"md88"},
   {"md90"},{"hawk"},{"t38"},{"p51"}, {"su95"}, {"t154"}, {"b1"}, {"ah64"}, {"uh60"}, {"sh60"}, {"hh60"}, {"ch47"}, {"ch53"}, {"ch54"}, {"uh1"}, {"ah1"}, {"oh58"}, {"oh6"}, {"mh6"}, {"ec45"}, {"h47"},
   // Registrations
   // Unfortunately, I haven't gotten a single FR24 alert about these aircraft except N859NA. If any of these trigger above your house, tell me!
