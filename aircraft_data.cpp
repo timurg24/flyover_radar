@@ -53,7 +53,7 @@ bool refreshOpenSkyToken() {
     return false;
   }
 
-  Serial.println("OpenSky token OK");
+  Serial.println("OpenSky Token Gen.` OK");
   return true;
 }
 
@@ -87,11 +87,11 @@ AircraftData getDataFromICAO(String icao) {
   http.begin(hexdb);
 
   int responseCode = http.GET();
-    
-  if(responseCode == 200) {
-    String payload = http.getString();
-    StaticJsonDocument<2048> doc;
+  String payload = http.getString();
+  StaticJsonDocument<2048> doc;
 
+
+  if(responseCode == 200) { // success
     DeserializationError error = deserializeJson(doc, payload);
 
     if (error) {
@@ -108,10 +108,10 @@ AircraftData getDataFromICAO(String icao) {
 
   } else if(responseCode == 404) {
     Serial.println("ICAO BD Request : 404");
-    // Serial.println(doc["message"].as<String>());
+    Serial.println(doc["error"].as<String>());
   } else if(responseCode == 429) {
     Serial.println("ICAO BD Request : 429");
-    // Serial.println(doc["message"].as<String>());
+    Serial.println(doc["error"].as<String>());
   } else {
     Serial.print("ICAO BD HTTP Error: ");
     Serial.println(http.errorToString(responseCode));
