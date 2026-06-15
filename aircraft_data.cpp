@@ -119,13 +119,13 @@ AircraftData getDataFromICAO(String icao) {
     }
 
   } else if(responseCode == 404) {
-    Serial.println("ICAO BD Request : 404");
+    Serial.print("\n\tICAO BD Request Fail [404] : ");
     Serial.println(doc["error"].as<String>());
   } else if(responseCode == 429) {
-    Serial.println("ICAO BD Request : 429");
+    Serial.print("\n\tICAO BD Request Fail [429] : ");
     Serial.println(doc["error"].as<String>());
   } else {
-    Serial.print("ICAO BD HTTP Error: ");
+    Serial.print("\n\tICAO BD HTTP Error: ");
     Serial.println(http.errorToString(responseCode));
   }
 
