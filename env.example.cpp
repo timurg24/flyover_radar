@@ -45,7 +45,7 @@ LocationBounds bounds = {
 int interfacePort = 24001;
 
 // Alerts
-AircraftData alerts[] = {
+std::vector<AircraftData> alerts = {
   // Aircraft Types
   {"a310"}, {"an12"}, {"a124"}, {"a148"}, {"an26"}, {"an32"}, {"v22"}, {"b742"}, {"b743"}, {"b74s"}, {"b52"}, {"c135"}, {"c17"}, {"blcf"}, {"e3tf"}, {"e6"}, {"k35r"}, {"p8"}, {"r135"}, {"dc3"},
   {"eufi"}, {"f16"}, {"il62"}, {"il76"}, {"il96"}, {"c5m"}, {"c130"}, {"c30j"}, {"f22"}, {"f35"}, {"p3"}, {"u2"}, {"dc10"}, {"f15"}, {"f18"}, {"md11"}, {"md81"},{"md82"},{"md83"},{"md87"},{"md88"},
@@ -56,4 +56,3 @@ AircraftData alerts[] = {
   // Category
   {.category = SpaceVehicle}, {.category = HighPerformance}, {.category = USMilitary}
 };
-int alertCount = sizeof(alerts) / sizeof(alerts[0]);
