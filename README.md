@@ -11,6 +11,21 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
 - Computer
 - Brain
 
+# Usage Instructions
+- Fill out all of the config values in `env.example`.cpp` with your data
+- Upload to ESP32
+
+# Telegram Usage
+- Send `List` to view your alerts
+- `Reset` to reset your alerts
+- `New` followed by (to create a new alert)
+    - `type`
+    - `registration` or `reg`
+    - `category` or `cat`
+    - `squawk` or `s`
+    - and then your trigger (like HighPerformance or N123VV)
+- 
+
 # Known Issues
 - HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.` General Aviation aircraft are the most affected.
 - HexDB returning incorrect ICAO type codes for brand new aircraft (registration should still be correct)
