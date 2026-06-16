@@ -36,7 +36,7 @@ void newAlert(TBMessage msg, int type, const String& trigger) {
 /// @param trigger Alert trigger
 void deleteAlert(TBMessage msg, const String& trigger) {
   for (int i = 0; i < alerts.size(); i++) {
-    if (alerts[i].icaoType == trigger || alerts[i].registration == trigger) {
+    if (alerts[i].icaoType == trigger || alerts[i].registration == trigger || alerts[i].squawk == trigger.toInt() || alerts[i].category == stringToCategory(trigger)) {
       alerts.erase(alerts.begin() + i);
       bot.sendMessage(msg, "Deleted alert");
     }
