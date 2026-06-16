@@ -45,7 +45,7 @@ LocationBounds bounds = {
 int interfacePort = 24001;
 
 // Alerts
-std::vector<AircraftData> alerts = {
+std::vector<AircraftData> alertsTemplate = {
   // Aircraft Types
   {"a310"}, {"an12"}, {"a124"}, {"a148"}, {"an26"}, {"an32"}, {"v22"}, {"b742"}, {"b743"}, {"b74s"}, {"b52"}, {"c135"}, {"c17"}, {"blcf"}, {"e3tf"}, {"e6"}, {"k35r"}, {"p8"}, {"r135"}, {"dc3"},
   {"eufi"}, {"f16"}, {"il62"}, {"il76"}, {"il96"}, {"c5m"}, {"c130"}, {"c30j"}, {"f22"}, {"f35"}, {"p3"}, {"u2"}, {"dc10"}, {"f15"}, {"f18"}, {"md11"}, {"md81"},{"md82"},{"md83"},{"md87"},{"md88"},
@@ -54,5 +54,9 @@ std::vector<AircraftData> alerts = {
   // Unfortunately, I haven't gotten a single FR24 alert about these aircraft except N859NA. If any of these trigger above your house, tell me!
   {.registration = "n859na"}, {.registration = "n993sf"}, {.registration = "n936ca"}, {.registration = "n7501v"}, {.registration = "n749cf"},
   // Category
-  {.category = SpaceVehicle}, {.category = HighPerformance}, {.category = USMilitary}
+  {.category = SpaceVehicle}, {.category = HighPerformance}, {.category = USMilitary},
+  // Squawk
+  {.squawk = 7700}, {.squawk = 7600}, {.squawk = 7500}
 };
+
+std::vector<AircraftData> alerts = {};
