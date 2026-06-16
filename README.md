@@ -18,6 +18,7 @@ You can control and recieve your aircraft alerts via Telegram!
 # Usage Instructions
 - Fill out all of the config values in `env.example.cpp` with your data.
 - Upload to ESP32
+- Restart ESP32 (if you get any serious errors)
 
 # Telegram Usage
 - Send `List` to view your alerts
