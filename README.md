@@ -1,5 +1,5 @@
 # flyover_radar :satellite:
-Are you tired of missing out on planespotting cool airplanes? Me too! After missing out on one too many Chinooks and Poseidons I've decided to build something that alerts me when a unique airplane is approaching.
+Are you tired of missing out on planespotting cool airplanes? Me too! After missing out on one too many Chinooks and Poseidons, I decided to build something that alerts me when a unique airplane is approaching.
 
 You can control and recieve your aircraft alerts via Telegram!
 
@@ -12,7 +12,7 @@ You can control and recieve your aircraft alerts via Telegram!
 - Telegram
 
 # Usage Instructions
-- Fill out all of the config values in `env.example.cpp` with your data
+- Fill out all of the config values in `env.example.cpp` with your data.
 - Upload to ESP32
 
 # Telegram Usage
@@ -29,5 +29,5 @@ You can control and recieve your aircraft alerts via Telegram!
 
 # Known Issues
 - HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.` General Aviation aircraft are the most affected.
-- HexDB returning incorrect ICAO type codes for brand new aircraft (registration should still be correct)
-- When something refuses to connect, just restart the ESP (always works for me)
+- HexDB returning incorrect ICAO type codes for brand new aircraft (registration should still be correct).
+- When something refuses to connect, just restart the ESP (maybe even a couple of times until the errors go away).
