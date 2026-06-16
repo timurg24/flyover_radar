@@ -75,7 +75,10 @@ void loadAlerts() {
   clearAlerts();
 
   String data = prefs.getString("list", "");
-  if(data == "") return;
+  if(data == "") {
+    prefs.end();
+    return;
+  }
   for(String line : splitCommand(data, '\n')) {
     AircraftData aircraft;
     std::vector<String> data = splitCommand(line, ',');
@@ -87,6 +90,7 @@ void loadAlerts() {
   }
 
   saveAlerts();
+  prefs.end();
 }
 
 /// @brief Loads alerts from the template

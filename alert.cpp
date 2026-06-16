@@ -91,6 +91,20 @@ void sendListOfAlerts(TBMessage msg) {
   bot.sendMessage(msg, message);
 }
 
+String joinFrom(const std::vector<String>& parts, int startIndex) {
+  String result = "";
+
+  for (int i = startIndex; i < parts.size(); i++) {
+    if (i > startIndex) {
+      result += " ";
+    }
+
+    result += parts[i];
+  }
+
+  return result;
+}
+
 unsigned long lastTelegramCheck = 0;
 const unsigned long telegramCheckInterval = 1000;
 
@@ -113,8 +127,8 @@ void handleTelegramMessage() {
       } else if (message[0] == "new") {
         if(message[1] == "type") newAlert(msg, 0, message[2]);
         else if(message[1] == "registration" || message[1] == "reg") newAlert(msg, 1, message[2]);
-        else if(message[1] == "category" || message[1] == "cat") newAlert(msg, 2, message[2]);
-        else if(message[1] == "squawk" || message[1] == "s") newAlert(msg, 3, message[2]);
+        else if(message[1] == "category" || message[1] == "cat") newAlert(msg, 2, joinFrom(message, 2));
+        else if(message[1] == "squawk" || message[1] == "s") newAlert(msg, 3,message[2]);
       } else if(message[0] == "delete") {
         deleteAlert(msg, message[1]);
       } else if (message[0] == "reset") {
@@ -126,6 +140,8 @@ void handleTelegramMessage() {
       }
   }
 }
+
+
 
 void compareAlerts(int aircraftCount, AircraftData aircraft[]) {
   for(int i = 0; i < aircraftCount; i++) {
@@ -159,7 +175,7 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[]) {
         aircraftType == alertType;
 
       bool categoryMatch =
-        aircraftCategory != -1 &&
+        aircraftCategory != Undefined &&
         aircraftCategory == alertCategory;
       
       bool squawkMatch =
