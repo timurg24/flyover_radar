@@ -38,7 +38,7 @@ struct AircraftData {
   String icaoType           = "";
   String registration       = "";
   AircraftCategory category = Undefined;
-  String squawk             = "";
+  int squawk                = -1;
 };
 
 #endif

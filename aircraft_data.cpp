@@ -119,13 +119,13 @@ AircraftData getDataFromICAO(String icao) {
     }
 
   } else if(responseCode == 404) {
-    Serial.print("\n\tICAO BD Request Fail [404] : ");
+    Serial.print("\n    ICAO BD Request Fail [404] : ");
     Serial.print(doc["error"].as<String>());
     Serial.print(" (");
     Serial.print(icao);
-    Serial.println(")");
+    Serial.print(")");
   } else if(responseCode == 429) {
-    Serial.print("\n\tICAO BD Request Fail [429] : ");
+    Serial.print("\n    ICAO BD Request Fail [429] : ");
     Serial.print(doc["error"].as<String>());
     Serial.print(" (");
     Serial.print(icao);
@@ -180,7 +180,7 @@ void getAircraftData(int& count, AircraftData data[]) {
           data[i] = getDataFromICAO(icao);
           data[i].category = static_cast<AircraftCategory>(state[17].as<int>());
           if(!state[14].isNull()) {
-            data[i].squawk = state[14].as<String>();
+            data[i].squawk = state[14].as<int>();
           }
           i++;
       }

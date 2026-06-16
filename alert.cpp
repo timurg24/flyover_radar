@@ -2,7 +2,6 @@
 #include "env.h"
 
 #include <WiFiClientSecure.h>
-#include <AsyncTelegram2.h>
 #include <vector>
 
 std::vector<String> alertedRegistrations;
@@ -10,12 +9,34 @@ std::vector<String> alertedRegistrations;
 WiFiClientSecure client;
 AsyncTelegram2 bot(client);
 
-bool isMilitaryReg(String registration) {
+
+/// @brief Splits a command by a delimeter
+/// @param original Source string
+/// @param delimeter Character used to split the original string
+/// @return Vector
+std::vector<String> splitCommand(const String& original, char delimeter) {
+  std::vector<String> result;
+  String acc;
+  for(char c : original) {
+    if(c == delimeter) {
+      result.push_back(acc);
+      acc.clear();
+    } else acc += c;
+  }
+  result.push_back(acc);
+  return result;
+}
+
+/// @brief Checks if the registration is USAF
+/// @param registration Registration
+/// @return True if USAF
+bool isMilitaryReg(const String& registration) {
   String first3 = registration.substring(0,3);
   if(isDigit(first3[0]) && isDigit(first3[1]) && first3[2] == '-') return true;
   else return false;
 }
 
+/// @brief Setups Telegram bot
 void setupAlerts() {
   Serial.print("Telegram Bot Auth ");
   client.setInsecure();
@@ -28,6 +49,8 @@ void setupAlerts() {
   } else Serial.println("FAIL");
 }
 
+/// @brief Sends a Telegram alert containing aircraft information
+/// @param data Aircraft data (contents used in message)
 void sendAlert(AircraftData data) {
   client.setInsecure();
   String message = "Flight Alert\n";
@@ -36,21 +59,89 @@ void sendAlert(AircraftData data) {
   bot.sendTo(telegramChatID, message);
 }
 
-void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, AircraftData alertAircraft[]) {
+
+
+/// @brief Sends a pretty list of all of the alerts
+/// @param msg Telegram message
+void sendListOfAlerts(TBMessage msg) {
+  String message = "List of your alerts:\n";
+  if(alerts.size() == 0) {
+    bot.sendMessage(msg, "There are no alerts set.");
+    return;
+  }
+  for(int i = 0; i < alerts.size(); i++) {
+    AircraftData& alert = alerts[i];
+    message += String(i + 1);
+    message += ". ";
+    if(alert.icaoType.length() > 0) {
+        message += "Type: ";
+        message += alert.icaoType;
+    } else if(alert.registration.length() > 0) {
+      message += "Registration: ";
+      message += alert.registration;
+    } else if(alert.category != Undefined) {
+      message += "Category: ";
+      message += categoryToString(alert.category);
+    } else {
+      message += "Squawk: ";
+      message += String(alert.squawk);
+    }
+    message += "\n";
+  }
+  bot.sendMessage(msg, message);
+}
+
+unsigned long lastTelegramCheck = 0;
+const unsigned long telegramCheckInterval = 1000;
+
+/// @brief Checks Telegram and if user sends a command to act upon it
+void handleTelegramMessage() {
+  if(millis() - lastTelegramCheck < telegramCheckInterval) {
+    return;
+  }
+
+  lastTelegramCheck = millis();
+
+  TBMessage msg;
+
+  if (bot.getNewMessage(msg)) {
+      std::vector<String> message = splitCommand(msg.text, ' ');
+      message[0].toLowerCase();
+
+      if (message[0] == "list") {
+          sendListOfAlerts(msg);
+      } else if (message[0] == "new") {
+        if(message[1] == "type") newAlert(msg, 0, message[2]);
+        else if(message[1] == "registration" || message[1] == "reg") newAlert(msg, 1, message[2]);
+        else if(message[1] == "category" || message[1] == "cat") newAlert(msg, 2, message[2]);
+        else if(message[1] == "squawk" || message[1] == "s") newAlert(msg, 3, message[2]);
+      } else if(message[0] == "delete") {
+        deleteAlert(msg, message[1]);
+      } else if (message[0] == "reset") {
+        clearAlerts();
+        bot.sendMessage(msg, "Reset your alerts.");
+      } else if (message[0] == "load" && message[1] == "template") {
+        fillAlertsFromTemplate();
+        bot.sendMessage(msg, "Your alerts are filled with the template.");
+      }
+  }
+}
+
+void compareAlerts(int aircraftCount, AircraftData aircraft[]) {
   for(int i = 0; i < aircraftCount; i++) {
-    for(int j = 0; j < alertCount; j++) {
+    for(int j = 0; j < alerts.size(); j++) {
 
       String aircraftRegistration = aircraft[i].registration;
-      String alertRegistration = alertAircraft[j].registration;
+      String alertRegistration = alerts[j].registration;
 
       String aircraftType = aircraft[i].icaoType;
-      String alertType = alertAircraft[j].icaoType;
+      String alertType = alerts[j].icaoType;
 
       int aircraftCategory = aircraft[i].category;
-      int alertCategory = alertAircraft[j].category;
+      int alertCategory = alerts[j].category;
 
-      String aircraftSquawk = aircraft[i].squawk;
-      String alertSquawk = alertAircraft[j].squawk;
+      int aircraftSquawk = aircraft[i].squawk;
+      int alertSquawk = alerts[j].squawk;
 
       aircraftRegistration.toUpperCase();
       alertRegistration.toUpperCase();
@@ -72,8 +163,8 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[], int alertCount, A
         aircraftCategory == alertCategory;
       
       bool squawkMatch =
-        aircraftSquawk.length() > 0 &&
-        alertSquawk.length() > 0 &&
+        aircraftSquawk != -1 &&
+        alertSquawk != -1 &&
         aircraftSquawk == alertSquawk;
 
       bool militaryMatch =

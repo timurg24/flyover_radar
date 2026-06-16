@@ -58,6 +58,7 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   setupAlerts();
+  loadAlerts();
 }
 
 unsigned long lastOpenSkyCheck = 0;
@@ -69,6 +70,8 @@ void loop() {
         lastOpenSkyCheck = currentMillis;
 
         getAircraftData(aircraftCount, aircraft);
-        compareAlerts(aircraftCount, aircraft, alerts);
+        compareAlerts(aircraftCount, aircraft);
     }
+
+    handleTelegramMessage();
 }
