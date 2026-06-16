@@ -1,4 +1,8 @@
 # flyover_radar :satellite:
+![ESP32](https://img.shields.io/badge/ESP32-supported-blue)
+![Telegram](https://img.shields.io/badge/Telegram-bot%20alerts-blue)
+![Status](https://img.shields.io/badge/status-active%20development-brightgreen)
+
 Are you tired of missing out on planespotting cool airplanes? Me too! After missing out on one too many Chinooks and Poseidons, I decided to build something that alerts me when a unique airplane is approaching.
 
 You can control and recieve your aircraft alerts via Telegram!
