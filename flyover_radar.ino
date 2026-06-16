@@ -8,8 +8,7 @@
   Copyright MMXXVI Timur Gabdrakhmanov. GPL-3.0 license.
 
   A sketch that allows you to get notifications about certain aircraft that will fly over your house.
-  Aircraft alerts can be configured inside the ENV CPP file and notifications are
-  sent via Telegram bot.
+  Aircraft alerts can be configured and recieved in Telegram.
 */
 
 // Aircraft
