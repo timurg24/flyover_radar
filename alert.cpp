@@ -45,8 +45,8 @@ void setupAlerts() {
   bot.setTelegramToken(telegramBotID);
 
   if(bot.begin()) {
-    Serial.println("OK");
-  } else Serial.println("FAIL");
+    Serial.print("OK");
+  } else Serial.print("FAIL");
 }
 
 /// @brief Sends a Telegram alert containing aircraft information
@@ -176,6 +176,9 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[]) {
 
       bool categoryMatch =
         aircraftCategory != Undefined &&
+        aircraftCategory != Unknown &&
+        alertCategory != Undefined &&
+        alertCategory != Unknown &&
         aircraftCategory == alertCategory;
       
       bool squawkMatch =

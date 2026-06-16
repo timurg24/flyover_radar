@@ -1,3 +1,4 @@
+#include "ArduinoJson/Deserialization/DeserializationError.hpp"
 #include "aircraft_data.h"
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -5,55 +6,46 @@
 String openSkyToken = "";
 
 bool refreshOpenSkyToken() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("OpenSky token failure: WiFi not connected");
-    return false;
-  }
-
+  Serial.print("\nASVR Token Gen. ");
+  if(!WiFi.isConnected()) return false;
   HTTPClient http;
 
-  String tokenUrl = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token";
-
-  http.begin(tokenUrl);
+  http.begin("https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token");
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-  String body = "";
-  body += "grant_type=client_credentials";
-  body += "&client_id=" + String(clientID);
-  body += "&client_secret=" + String(clientSecret);
+  String body = 
+    "grant_type=client_credentials"
+    "&client_id=" + String(clientID) +
+    "&client_secret=" + String(clientSecret);
 
-  int responseCode = http.POST(body);
-
-  if (responseCode != 200) {
-    Serial.print("OpenSky token HTTP error: ");
-    Serial.println(responseCode);
-    Serial.println(http.getString());
+  int httpCode = http.POST(body);
+  
+  if(httpCode <= 0) {
+    Serial.print("FAIL (Request failed)\n");
     http.end();
     return false;
   }
 
-  String payload = http.getString();
-
-  StaticJsonDocument<2048> doc;
-  DeserializationError error = deserializeJson(doc, payload);
-
-  if (error) {
-    Serial.print("OpenSky token JSON parse failure: ");
-    Serial.println(error.c_str());
-    http.end();
-    return false;
-  }
-
-  openSkyToken = doc["access_token"].as<String>();
-
+  String response = http.getString();
   http.end();
 
-  if (openSkyToken.length() == 0) {
-    Serial.println("OpenSky token failure: empty token");
+  StaticJsonDocument<1024> doc;
+  DeserializationError error = deserializeJson(doc, response);
+
+  if(error) {
+    Serial.print("FAIL (Failed to parse JSON)\n");
     return false;
   }
 
-  Serial.println("\nOpenSky Token Gen. OK");
+  const char* accessToken = doc["access_token"];
+
+  if(!accessToken) {
+    Serial.print("FAIL (No access token found)\n");
+    return false;
+  }
+
+  openSkyToken = String(accessToken);
+  Serial.print("OK\n");
   return true;
 }
 

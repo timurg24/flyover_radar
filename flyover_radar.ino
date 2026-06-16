@@ -48,8 +48,15 @@ void setup() {
   WiFi.begin(wifiName, wifiPassword);
   Serial.print("Connecting to WiFi");
 
+  int i = 0;
   while(WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
+    i++;
+    if(i == 25) {
+      Serial.print("TIMEOUT (Restarting)");
+      delay(300);
+      ESP.restart();
+    }
     delay(100);
   }
   Serial.println("OK");
