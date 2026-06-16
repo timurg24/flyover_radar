@@ -13,20 +13,20 @@ void newAlert(TBMessage msg, int type, const String& trigger) {
     newAircraftAlert.icaoType = trigger;
     alerts.push_back(newAircraftAlert);
 
-    bot.sendMessage(msg, "New type code alert created");
+    bot.sendMessage(msg, "New type code alert created.");
   } else if (type == 1) {  // registration
     newAircraftAlert.registration = trigger;
     alerts.push_back(newAircraftAlert);
 
-    bot.sendMessage(msg, "New registration alert created");
+    bot.sendMessage(msg, "New registration alert created.");
   } else if (type == 2) {
     newAircraftAlert.category = stringToCategory(trigger);
     alerts.push_back(newAircraftAlert);
-    bot.sendMessage(msg, "New category alert created");
+    bot.sendMessage(msg, "New category alert created.");
   } else if (type == 3) {
     newAircraftAlert.squawk = trigger.toInt();
     alerts.push_back(newAircraftAlert);
-    bot.sendMessage(msg, "New squawk alert created");
+    bot.sendMessage(msg, "New squawk alert created.");
   }
   saveAlerts();
 }
@@ -38,7 +38,7 @@ void deleteAlert(TBMessage msg, const String& trigger) {
   for (int i = 0; i < alerts.size(); i++) {
     if (alerts[i].icaoType == trigger || alerts[i].registration == trigger || alerts[i].squawk == trigger.toInt() || alerts[i].category == stringToCategory(trigger)) {
       alerts.erase(alerts.begin() + i);
-      bot.sendMessage(msg, "Deleted alert");
+      bot.sendMessage(msg, "Deleted alert.");
     }
   }
   saveAlerts();
