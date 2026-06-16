@@ -12,7 +12,7 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
 - Brain
 
 # Usage Instructions
-- Fill out all of the config values in `env.example`.cpp` with your data
+- Fill out all of the config values in `env.example.cpp` with your data
 - Upload to ESP32
 
 # Telegram Usage
