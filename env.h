@@ -11,16 +11,15 @@ extern const char* wifiPassword;
 
 extern const char* clientID;
 extern const char* clientSecret;
+extern int openSkyInterval;
 
 extern const char* telegramBotID;
 extern int64_t telegramChatID;
 
 extern LocationBounds bounds;
 
-extern int interfacePort;
 
-extern int openSkyInterval;
-
+extern std::vector<AircraftData> alertsTemplate;
 extern std::vector<AircraftData> alerts;
 
 #endif
