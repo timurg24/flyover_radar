@@ -21,6 +21,10 @@ void newAlert(TBMessage msg, int type, const String& trigger) {
     bot.sendMessage(msg, "New registration alert created.");
   } else if (type == 2) {
     newAircraftAlert.category = stringToCategory(trigger);
+    if (newAircraftAlert.category == Unknown || newAircraftAlert.category == Undefined) {
+      bot.sendMessage(msg, "Unknown category. Alert was not created.");
+      return;
+    }
     alerts.push_back(newAircraftAlert);
     bot.sendMessage(msg, "New category alert created.");
   } else if (type == 3) {
@@ -65,23 +69,31 @@ void saveAlerts() {
 }
 
 /// @brief Clears your alerts
-void clearAlerts() { alerts.clear(); }
+void clearAlerts() { alerts.clear(); saveAlerts(); }
 
 /// @brief Loads your alerts from ESP32's flash memory
 void loadAlerts() {
   Preferences prefs;
   prefs.begin("tg_alerts", true);
 
-  clearAlerts();
+  alerts.clear();
 
   String data = prefs.getString("list", "");
   if(data == "") {
     prefs.end();
     return;
   }
+
   for(String line : splitCommand(data, '\n')) {
+    line.trim();
+
+    if(line.length() == 0) continue;
+
     AircraftData aircraft;
     std::vector<String> data = splitCommand(line, ',');
+
+    if(data.size() < 4) continue;
+
     aircraft.icaoType = data[0];
     aircraft.registration = data[1];
     aircraft.category = stringToCategory(data[2]);
@@ -96,4 +108,5 @@ void loadAlerts() {
 /// @brief Loads alerts from the template
 void fillAlertsFromTemplate() {
   alerts = alertsTemplate;
+  saveAlerts();
 }

@@ -16,6 +16,9 @@
 int aircraftCount = 0;
 AircraftData aircraft[512];
 
+// Alerts
+std::vector<String> alertedRegistrations;
+
 // =====================
 //        Code
 // =====================
@@ -65,10 +68,16 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   setupAlerts();
+  Serial.print("\nLoading alerts ");
   loadAlerts();
+  Serial.print("OK");
+  refreshOpenSkyToken();
 }
 
-unsigned long lastOpenSkyCheck = 0;
+unsigned long lastOpenSkyCheck = openSkyInterval;
+
+unsigned long lastAlertClearTime = 0;
+const unsigned long ALERT_CLEAR_INTERVAL = 60UL * 60UL * 1000UL; // 1 hour
 
 void loop() {
     unsigned long currentMillis = millis();
@@ -78,6 +87,11 @@ void loop() {
 
         getAircraftData(aircraftCount, aircraft);
         compareAlerts(aircraftCount, aircraft);
+    }
+
+    if(currentMillis - lastAlertClearTime >= ALERT_CLEAR_INTERVAL) {
+      alertedRegistrations.clear();
+      lastAlertClearTime = currentMillis;
     }
 
     handleTelegramMessage();

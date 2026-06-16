@@ -6,7 +6,7 @@
 String categoryToString(AircraftCategory cat) {
   switch(cat) {
     case Undefined: return "Undefined"; break;
-    case Unknown: return "Unknown"; break;
+    case Unknown: return "Unknown Category"; break;
     case NoCat: return "No Category"; break;
     case Light: return "Light (<15,500lbs)"; break;
     case Small: return "Small (15,550lbs to 75,000lbs)"; break;
@@ -69,7 +69,6 @@ AircraftCategory stringToCategory(const String& cat) {
   String value = cat;
   value.toLowerCase(); // then why even have const string&???
   if (value == "undefined") return Undefined;
-  else if (value == "unknown") return Unknown;
   else if (value == "no category" || value == "nocat") return NoCat;
   else if (value == "light") return Light;
   else if (value == "small") return Small;

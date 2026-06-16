@@ -6,6 +6,7 @@
 
 extern WiFiClientSecure client;
 extern AsyncTelegram2 bot;
+extern std::vector<String> alertedRegistrations;
 
 // defined in category.alert.cpp
 String categoryToString(AircraftCategory cat);

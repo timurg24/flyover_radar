@@ -4,7 +4,7 @@
 #include <WiFiClientSecure.h>
 #include <vector>
 
-std::vector<String> alertedRegistrations;
+
 
 WiFiClientSecure client;
 AsyncTelegram2 bot(client);
@@ -31,9 +31,13 @@ std::vector<String> splitCommand(const String& original, char delimeter) {
 /// @param registration Registration
 /// @return True if USAF
 bool isMilitaryReg(const String& registration) {
-  String first3 = registration.substring(0,3);
-  if(isDigit(first3[0]) && isDigit(first3[1]) && first3[2] == '-') return true;
-  else return false;
+  if (registration.length() < 3) {
+    return false;
+  }
+
+  return isDigit(registration[0]) &&
+         isDigit(registration[1]) &&
+         registration[2] == '-';
 }
 
 /// @brief Setups Telegram bot
@@ -56,8 +60,11 @@ void sendAlert(AircraftData data) {
   String message = "Flight Alert\n";
   message += "ICAO: " + data.icaoType;
   message += "\nRegistration: " + data.registration;
+  message += "\nCategory: " + categoryToString(data.category);
+  message += "\nSquawk: " + String(data.squawk);
   bot.sendTo(telegramChatID, message);
 }
+
 
 
 
@@ -66,7 +73,7 @@ void sendAlert(AircraftData data) {
 void sendListOfAlerts(TBMessage msg) {
   String message = "List of your alerts:\n";
   if(alerts.size() == 0) {
-    bot.sendMessage(msg, "There are no alerts set.");
+    bot.sendMessage(msg, String("There are no alerts set."));
     return;
   }
   for(int i = 0; i < alerts.size(); i++) {
@@ -79,7 +86,7 @@ void sendListOfAlerts(TBMessage msg) {
     } else if(alert.registration.length() > 0) {
       message += "Registration: ";
       message += alert.registration;
-    } else if(alert.category != Undefined) {
+    } else if(alert.category != Undefined && alert.category != Unknown) {
       message += "Category: ";
       message += categoryToString(alert.category);
     } else {
@@ -125,10 +132,17 @@ void handleTelegramMessage() {
       if (message[0] == "list") {
           sendListOfAlerts(msg);
       } else if (message[0] == "new") {
+
+        if(message.size() < 3) {
+          bot.sendMessage(msg, "Usage: new type b762, new reg N123VV, squawk 7740, category high performance");
+          return;
+        }
+
         if(message[1] == "type") newAlert(msg, 0, message[2]);
         else if(message[1] == "registration" || message[1] == "reg") newAlert(msg, 1, message[2]);
         else if(message[1] == "category" || message[1] == "cat") newAlert(msg, 2, joinFrom(message, 2));
         else if(message[1] == "squawk" || message[1] == "s") newAlert(msg, 3,message[2]);
+
       } else if(message[0] == "delete") {
         deleteAlert(msg, message[1]);
       } else if (message[0] == "reset") {
@@ -199,10 +213,15 @@ void compareAlerts(int aircraftCount, AircraftData aircraft[]) {
       }
 
       if (registrationMatch || typeMatch || categoryMatch || squawkMatch || militaryMatch) {
-        if(!alreadyAlerted) {
+        if (!alreadyAlerted) {
           sendAlert(aircraft[i]);
+
           Serial.print(" (Alert Sent)");
-          alertedRegistrations.push_back(aircraftRegistration);
+
+          if (aircraftRegistration.length() > 0) {
+            alertedRegistrations.push_back(aircraftRegistration);
+          }
+
           break; // prevents sending multiple alerts for same aircraft
         }
       }

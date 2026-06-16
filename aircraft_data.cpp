@@ -171,8 +171,14 @@ void getAircraftData(int& count, AircraftData data[]) {
           String icao = state[0].as<String>();
           data[i] = getDataFromICAO(icao);
           data[i].category = static_cast<AircraftCategory>(state[17].as<int>());
-          if(!state[14].isNull()) {
-            data[i].squawk = state[14].as<int>();
+          if (!state[14].isNull()) {
+            String squawkStr = state[14].as<String>();
+            data[i].squawk = squawkStr.toInt();
+
+            Serial.print(" Squawk: ");
+            Serial.print(data[i].squawk);
+          } else {
+            data[i].squawk = -1;
           }
           i++;
       }
