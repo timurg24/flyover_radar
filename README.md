@@ -24,7 +24,8 @@ You can change the definition of a cool airplane in the `env.example.cpp` file!
     - `category` or `cat`
     - `squawk` or `s`
     - and then your trigger (like HighPerformance or N123VV)
-- 
+- `Load template` to load from the template of alerts
+- `Delete` followed by the trigger deletes that alert
 
 # Known Issues
 - HexDB (ICAO Lookup database) can sometimes not recognize aircraft, resulting in `ICAO DB Request Fail [404] : Aircraft not found.` General Aviation aircraft are the most affected.
