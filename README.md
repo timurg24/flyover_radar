@@ -1,15 +1,15 @@
 # flyover_radar :satellite:
-Are you tired of missing out on planespotting cool airplanes? Me too! I've missed one too many Chinooks and Stratotankers so I built this software to alert me when a cool airplane is approaching.
+Are you tired of missing out on planespotting cool airplanes? Me too! After missing out on one too many Chinooks and Poseidons I've decided to build something that alerts me when a unique airplane is approaching.
 
-You can change the definition of a cool airplane in the `env.example.cpp` file!
+You can control and recieve your aircraft alerts via Telegram!
 
 # Requirements
 - Yourself
 - ESP32 with WiFi
 - Time
 - All of the libraries installed (just install every single library available until the errors go away)
-- Computer
-- Brain
+- OpenSky API keys
+- Telegram
 
 # Usage Instructions
 - Fill out all of the config values in `env.example.cpp` with your data
