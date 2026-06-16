@@ -13,7 +13,7 @@ You can control and recieve your aircraft alerts via Telegram!
 - Time
 - All of the libraries installed (just install every single library available until the errors go away)
 - OpenSky API keys
-- Telegram
+- Telegram bot
 
 # Usage Instructions
 - Fill out all of the config values in `env.example.cpp` with your data.
